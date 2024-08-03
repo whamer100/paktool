@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
 project(paktool)
 
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    message(FATAL_ERROR "MSVC is required to build this project.")
+endif()
+
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(vendor/libpeggle)
