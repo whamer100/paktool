@@ -6,6 +6,8 @@
 
 int main(const int argc, char** argv)
 {
+    log_init();
+
     CLI::App app("PopCap Pak Tool");
 
     std::string input_path;
@@ -36,29 +38,29 @@ int main(const int argc, char** argv)
 
     if (sub_pack->parsed()) {
         if (!std::filesystem::is_directory(input_path)) {
-            log_fatal("Input path is not a directory!");
+            log_fatal("Input path is not a directory!\n");
             exit(1);
         }
         auto pak = Peggle::Pak(input_path);
         pak.SetXor(0xF7);
         if (std::filesystem::is_directory(output_path)) {
-            log_fatal("Output path is a directory!");
+            log_fatal("Output path is a directory!\n");
             exit(1);
         }
         pak.Save(output_path);
     }
     else if (sub_unpack->parsed()) {
         if (std::filesystem::is_directory(input_path)) {
-            log_fatal("Input path is a directory!");
+            log_fatal("Input path is a directory!\n");
             exit(1);
         }
         const auto pak = Peggle::Pak(input_path);
         if (!pak.IsPak()) {
-            log_fatal("Input file is not a valid Pak file!");
+            log_fatal("Input file is not a valid Pak file!\n");
             exit(1);
         }
         if (std::filesystem::exists(output_path) && !std::filesystem::is_directory(output_path)) {
-            log_fatal("Output path is not a valid directory!");
+            log_fatal("Output path is not a valid directory!\n");
             exit(1);
         }
         pak.Export(output_path);

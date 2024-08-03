@@ -25,6 +25,8 @@
 static bool log_verbose = false;
 static bool log_disable = false;
 
+void log_init();
+
 void log_setVerbosity(bool b);
 void log_disableCompletely(bool b);
 

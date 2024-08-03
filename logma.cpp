@@ -3,6 +3,15 @@
 #include <Windows.h>
 #include <cstdio>
 
+void log_init() {
+    DWORD dwMode;
+    HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleMode(hOutput, &dwMode);
+    dwMode |= ENABLE_PROCESSED_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOutput, dwMode);
+}
+
+
 void log_setVerbosity(const bool b) {
     log_verbose = b;
     // so funny thing, we dont actually have to change this ever
