@@ -1,0 +1,3 @@
+[submodule "vendor/libpeggle"]
+	path = vendor/libpeggle
+	url = https://github.com/whamer100/libpeggle
