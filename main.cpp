@@ -1,8 +1,9 @@
 #include <iostream>
 #include <filesystem>
+
+#include "logma.h"
 #include "vendor/libpeggle/libpeggle.h"
 #include "vendor/CLI11.hpp"
-#include "logma.h"
 
 int main(const int argc, char** argv)
 {
@@ -12,6 +13,7 @@ int main(const int argc, char** argv)
 
     std::string input_path;
     std::string output_path;
+    uint8_t Xor = 0x7F;
     bool verbosity{false};
 
     app.add_flag("-v,--verbose", verbosity, "Increase verbosity");
@@ -23,11 +25,13 @@ int main(const int argc, char** argv)
         ->required();
     sub_unpack->add_option("output", output_path, "Output directory")
         ->required();
+    sub_unpack->add_option("xor", Xor, "Overwrite xor");
 
     sub_pack->add_option("input", input_path, "Input directory")
         ->required();
     sub_pack->add_option("output", output_path, "Output file")
         ->required();
+    sub_pack->add_option("xor", Xor, "Overwrite xor");
 
     CLI11_PARSE(app, argc, argv);
 
@@ -42,7 +46,7 @@ int main(const int argc, char** argv)
             exit(1);
         }
         auto pak = Peggle::Pak(input_path);
-        pak.SetXor(0xF7);
+        pak.SetXor(Xor);
         if (std::filesystem::is_directory(output_path)) {
             log_fatal("Output path is a directory!\n");
             exit(1);
@@ -54,7 +58,7 @@ int main(const int argc, char** argv)
             log_fatal("Input path is a directory!\n");
             exit(1);
         }
-        const auto pak = Peggle::Pak(input_path);
+        const auto pak = Peggle::Pak(input_path, Xor);
         if (!pak.IsPak()) {
             log_fatal("Input file is not a valid Pak file!\n");
             exit(1);
